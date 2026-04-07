@@ -1,0 +1,138 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  position: relative;
+  min-height: 100vh;
+  background-color: #020617;
+  color: #e5e7eb;
+  font-family: 'Inter', Arial, sans-serif;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* FUNDO COM IMAGEM (CAMADA SEPARADA) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background-image: url("../img/nasa-realistic.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 600px;
+
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #4fc3f7;
+}
+
+header p {
+  font-weight: 400;
+  margin-top: 8px;
+}
+
+.idiomas button {
+  margin: 10px 5px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* CONTAINERS */
+.form-container,
+.resultado,
+.tabela-container {
+  background: #111827;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #1f2937;
+}
+
+/* FORM */
+#formBusca {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  background: #1f2937;
+  color: white;
+}
+
+button {
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  background: #4fc3f7;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #29f62d;
+}
+    
+/* RESULTADO */
+.resultado img {
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 8px;
+}
+
+/* TABELA */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #391279;
+}   
+
+th {
+  color: #4fc3f7;
+  font-weight: 600;
+}
+
+/* BOTÃO EXCLUIR */
+.excluir {
+  background: #ff0000;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.excluir:hover {
+  background: #ff0000;
+}

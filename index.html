@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Explorador Espacial - NASA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FONTE INTER (NASA) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header>
+    <h1 id="titulo">🌌 Explorador Espacial</h1>
+    <p id="descricao">Busque imagens do espaço usando a API oficial da NASA</p>
+
+    <div class="idiomas">
+      <button onclick="mudarIdioma('pt')">PT</button>
+      <button onclick="mudarIdioma('en')">EN</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="form-container">
+      <h2 id="tituloBusca">Buscar imagem por data</h2>
+
+      <form id="formBusca">
+        <label for="data" id="labelData">Selecione uma data:</label>
+        <input type="date" id="data" required>
+        <button type="submit" id="btnBuscar">Buscar</button>
+      </form>
+    </section>
+
+    <section id="resultado" class="resultado"></section>
+
+    <section class="tabela-container">
+      <h2 id="tituloTabela">Consultas salvas</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabela"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- JS -->
+  <script src="script/script.js"></script>
+</body>
+</html>
