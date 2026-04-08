@@ -22,14 +22,17 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
+
   background-image: url("../img/nasa-realistic.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 600px;
+  background-size: cover; /* ⬅️ ISSO FAZ OCUPAR TODA A TELA */
+
   opacity: 0.25;
   z-index: -1;
   pointer-events: none;
 }
+
 
 header {
   text-align: center;
