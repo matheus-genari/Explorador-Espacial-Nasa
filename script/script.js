@@ -1,12 +1,6 @@
-// =====================
-// CONFIGURAÇÃO DA API
-// =====================
 const API_KEY = "qx9vYPhAh3Sy2UwzBCrcarUeQGhri7dJrjl6wuLf";
 const API_URL = "https://api.nasa.gov/planetary/apod";
 
-// =====================
-// TRADUÇÕES
-// =====================
 const textos = {
   pt: {
     titulo: "🌌 Explorador Espacial",
@@ -16,8 +10,10 @@ const textos = {
     botao: "Buscar",
     tabela: "Consultas salvas",
     carregando: "Carregando...",
-    confirmar: "Tem certeza que deseja excluir esta consulta?",
-    video: "Este conteúdo é um vídeo"
+    erro: "Data inválida ou erro ao buscar dados.",
+    video: "Este conteúdo é um vídeo",
+    confirmarExcluir: "Deseja excluir esta consulta?",
+    confirmarLimpar: "Deseja apagar todo o histórico?"
   },
   en: {
     titulo: "🌌 Space Explorer",
@@ -27,126 +23,115 @@ const textos = {
     botao: "Search",
     tabela: "Saved searches",
     carregando: "Loading...",
-    confirmar: "Are you sure you want to delete this search?",
-    video: "This content is a video"
+    erro: "Invalid date or error fetching data.",
+    video: "This content is a video",
+    confirmarExcluir: "Delete this search?",
+    confirmarLimpar: "Clear all history?"
   }
 };
 
-// =====================
-// ELEMENTOS DOM
-// =====================
 const form = document.getElementById("formBusca");
-const dataInput = document.getElementById("data");
+const dia = document.getElementById("dia");
+const mes = document.getElementById("mes");
+const ano = document.getElementById("ano");
 const resultado = document.getElementById("resultado");
 const tabela = document.getElementById("tabela");
 
-// =====================
-// IDIOMA
-// =====================
-function mudarIdioma(idioma) {
-  document.getElementById("titulo").innerText = textos[idioma].titulo;
-  document.getElementById("descricao").innerText = textos[idioma].descricao;
-  document.getElementById("tituloBusca").innerText = textos[idioma].buscar;
-  document.getElementById("labelData").innerText = textos[idioma].label;
-  document.getElementById("btnBuscar").innerText = textos[idioma].botao;
-  document.getElementById("tituloTabela").innerText = textos[idioma].tabela;
-
-  localStorage.setItem("idioma", idioma);
+function mudarIdioma(id) {
+  document.getElementById("titulo").innerText = textos[id].titulo;
+  document.getElementById("descricao").innerText = textos[id].descricao;
+  document.getElementById("tituloBusca").innerText = textos[id].buscar;
+  document.getElementById("labelData").innerText = textos[id].label;
+  document.getElementById("btnBuscar").innerText = textos[id].botao;
+  document.getElementById("tituloTabela").innerText = textos[id].tabela;
+  localStorage.setItem("idioma", id);
 }
 
-// =====================
-// EVENTO FORM
-// =====================
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", e => {
   e.preventDefault();
-  buscarImagem(dataInput.value);
+  const data = montarData();
+  if (data) buscarImagem(data);
 });
 
-// =====================
-// BUSCAR IMAGEM
-// =====================
+function montarData() {
+  if (dia.value.length !== 2 || mes.value.length !== 2 || ano.value.length !== 4) {
+    resultado.innerHTML = `<p style="color:#f87171;">Data inválida.</p>`;
+    return null;
+  }
+  return `${ano.value}-${mes.value}-${dia.value}`;
+}
+
 async function buscarImagem(data) {
   const idioma = localStorage.getItem("idioma") || "pt";
   resultado.innerHTML = `<p>${textos[idioma].carregando}</p>`;
 
-  const response = await fetch(`${API_URL}?api_key=${API_KEY}&date=${data}`);
-  const dados = await response.json();
+  try {
+    const res = await fetch(`${API_URL}?api_key=${API_KEY}&date=${data}`);
+    const dados = await res.json();
 
-  mostrarResultado(dados, idioma);
-  salvarConsulta(dados);
-  carregarTabela();
-}
+    if (dados.media_type === "image") {
+      resultado.innerHTML = `
+        <h2>${dados.title}</h2>
+        <p>${dados.explanation}</p>
+        <img src="${dados.url}" alt="${dados.title}">
+      `;
+    } else {
+      resultado.innerHTML = `
+        <h2>${dados.title}</h2>
+        <p>${textos[idioma].video}</p>
+        <a href="${dados.url}" target="_blank">Abrir vídeo</a>
+      `;
+    }
 
-// =====================
-// MOSTRAR RESULTADO
-// =====================
-function mostrarResultado(dados, idioma) {
-  if (dados.media_type === "image") {
-    resultado.innerHTML = `
-      <h2>${dados.title}</h2>
-      <p>${dados.explanation}</p>
-      <img src="${dados.url}" alt="${dados.title}">
-    `;
-  } else {
-    resultado.innerHTML = `
-      <h2>${dados.title}</h2>
-      <p>${textos[idioma].video}</p>
-      <a href="${dados.url}" target="_blank">Abrir vídeo</a>
-    `;
+    salvarConsulta(dados);
+    carregarTabela();
+  } catch {
+    resultado.innerHTML = `<p style="color:#f87171;">${textos[idioma].erro}</p>`;
   }
 }
 
-// =====================
-// LOCAL STORAGE
-// =====================
 function salvarConsulta(dados) {
-  let lista = JSON.parse(localStorage.getItem("nasa")) || [];
+  const lista = JSON.parse(localStorage.getItem("nasa")) || [];
   if (lista.some(item => item.data === dados.date)) return;
 
-  lista.push({
-    titulo: dados.title,
-    data: dados.date,
-    tipo: dados.media_type
-  });
-
+  lista.push({ titulo: dados.title, data: dados.date, tipo: dados.media_type });
   localStorage.setItem("nasa", JSON.stringify(lista));
 }
 
-// =====================
-// TABELA
-// =====================
 function carregarTabela() {
   tabela.innerHTML = "";
   const lista = JSON.parse(localStorage.getItem("nasa")) || [];
 
-  lista.forEach((item, index) => {
+  lista.forEach((item, i) => {
     tabela.innerHTML += `
       <tr>
         <td>${item.titulo}</td>
         <td>${item.data}</td>
         <td>${item.tipo}</td>
-        <td><button class="excluir" onclick="excluirItem(${index})">Excluir</button></td>
+        <td><button class="excluir" onclick="excluir(${i})">Excluir</button></td>
       </tr>
     `;
   });
 }
 
-// =====================
-// EXCLUIR COM CONFIRMAÇÃO
-// =====================
-function excluirItem(index) {
+function excluir(i) {
   const idioma = localStorage.getItem("idioma") || "pt";
-  if (!confirm(textos[idioma].confirmar)) return;
+  if (!confirm(textos[idioma].confirmarExcluir)) return;
 
-  let lista = JSON.parse(localStorage.getItem("nasa")) || [];
-  lista.splice(index, 1);
+  const lista = JSON.parse(localStorage.getItem("nasa")) || [];
+  lista.splice(i, 1);
   localStorage.setItem("nasa", JSON.stringify(lista));
   carregarTabela();
 }
 
-// =====================
-// INICIALIZAÇÃO
-// =====================
-const idiomaInicial = localStorage.getItem("idioma") || "pt";
-mudarIdioma(idiomaInicial);
+function limparHistorico() {
+  const idioma = localStorage.getItem("idioma") || "pt";
+  if (!confirm(textos[idioma].confirmarLimpar)) return;
+
+  localStorage.removeItem("nasa");
+  carregarTabela();
+}
+
+mudarIdioma(localStorage.getItem("idioma") || "pt");
 carregarTabela();
+``

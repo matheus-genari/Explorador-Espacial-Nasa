@@ -5,12 +5,11 @@
   <title>Explorador Espacial - NASA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- FONTE INTER (NASA) -->
+  <!-- Fonte Inter (NASA) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -30,8 +29,14 @@
       <h2 id="tituloBusca">Buscar imagem por data</h2>
 
       <form id="formBusca">
-        <label for="data" id="labelData">Selecione uma data:</label>
-        <input type="date" id="data" required>
+        <label id="labelData">Selecione uma data:</label>
+
+        <div class="data-campos">
+          <input type="text" id="dia" placeholder="DD" maxlength="2" required>
+          <input type="text" id="mes" placeholder="MM" maxlength="2" required>
+          <input type="text" id="ano" placeholder="AAAA" maxlength="4" required>
+        </div>
+
         <button type="submit" id="btnBuscar">Buscar</button>
       </form>
     </section>
@@ -40,6 +45,8 @@
 
     <section class="tabela-container">
       <h2 id="tituloTabela">Consultas salvas</h2>
+
+      <button class="limpar" onclick="limparHistorico()">Limpar histórico</button>
 
       <table>
         <thead>
@@ -55,7 +62,6 @@
     </section>
   </main>
 
-  <!-- JS -->
   <script src="script/script.js"></script>
 </body>
 </html>
