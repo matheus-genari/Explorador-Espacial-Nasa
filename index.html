@@ -1,66 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Explorador Espacial - NASA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Fonte Inter (NASA) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Explorador Espacial - NASA</title>
 
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-  <header>
-    <h1 id="titulo">🌌 Explorador Espacial</h1>
-    <p id="descricao">Busque imagens do espaço usando a API oficial da NASA</p>
 
-    <div class="idiomas">
-      <button onclick="mudarIdioma('pt')">PT</button>
-      <button onclick="mudarIdioma('en')">EN</button>
-    </div>
+  <header>
+    <h1>🌌 Explorador Espacial - NASA</h1>
   </header>
 
   <main>
-    <section class="form-container">
-      <h2 id="tituloBusca">Buscar imagem por data</h2>
+    <section class="form-section">
+      <form id="form-data">
 
-      <form id="formBusca">
-        <label id="labelData">Selecione uma data:</label>
-
+        <!-- CAMPOS DE DATA MELHORADOS -->
         <div class="data-campos">
-          <input type="text" id="dia" placeholder="DD" maxlength="2" required>
-          <input type="text" id="mes" placeholder="MM" maxlength="2" required>
-          <input type="text" id="ano" placeholder="AAAA" maxlength="4" required>
+          <input type="number" id="dia" placeholder="DD" min="1" max="31" required>
+          <input type="number" id="mes" placeholder="MM" min="1" max="12" required>
+          <input type="number" id="ano" placeholder="AAAA" min="1900" max="2100" required>
         </div>
 
-        <button type="submit" id="btnBuscar">Buscar</button>
+        <button type="submit">🔭 Buscar</button>
       </form>
     </section>
 
-    <section id="resultado" class="resultado"></section>
+    <section id="resultado"></section>
 
-    <section class="tabela-container">
-      <h2 id="tituloTabela">Consultas salvas</h2>
-
-      <button class="limpar" onclick="limparHistorico()">Limpar histórico</button>
-
+    <section class="historico">
+      <h2>📋 Histórico de Consultas</h2>
       <table>
         <thead>
           <tr>
-            <th>Título</th>
             <th>Data</th>
-            <th>Tipo</th>
-            <th>Ação</th>
+            <th>Título</th>
+            <th>Ações</th>
           </tr>
         </thead>
-        <tbody id="tabela"></tbody>
+        <tbody id="tabela-consultas"></tbody>
       </table>
     </section>
   </main>
+
+  <!-- SWEETALERT -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script src="script/script.js"></script>
 </body>
